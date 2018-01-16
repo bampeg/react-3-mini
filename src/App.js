@@ -31,16 +31,38 @@ class App extends Component {
   getVehicles() {
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get('http://joes-autos.herokuapp.com/api/vehicles')
+    .then((response)=>{
+      console.log(response)
+      this.setState({
+        vehiclesToDisplay:response.data
+      })
+      toast.success(`${response.data.length} mobile vehicular units found`)
+    }).catch((err)=>{
+      console.error(err)
+      toast.error("aint no vehicles")
+    })
   }
 
   getPotentialBuyers() {
     // axios (GET)
     // setState with response -> buyersToDisplay
+
   }
 
   sellCar( id ) {
     // axios (DELETE)
     // setState with response -> vehiclesToDisplay
+    axios.delete(`http://joes-autos.herokuapp.com/api/vehicles/${id}`)
+      .then((response)=>{
+        this.setState({
+          vehiclesToDisplay:response.data.vehicles
+        })
+        toast.success("Yo sold yo carrrgh")
+      }).catch((err)=>{
+        console.error(err)
+        toast.error("Yo wazn't able to sell yo carrgh")
+      })
   }
 
   filterByMake() {
@@ -48,18 +70,49 @@ class App extends Component {
 
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get(`http://joes-autos.herokuapp.com/api/vehicles?make=${make}`)
+      .then((response)=>{
+        this.setState({
+          vehiclesToDisplay:response.data
+        })
+        toast.success(`These are all made by ${make}`)
+      }).catch((err)=>{
+        console.error(err)
+        toast.error("failed to filter by make")
+      })
   }
 
   filterByColor() {
-    let color = this.refs.selectedColor.value;
+    let color = this.refs.selectedColor.value
 
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get(`http://joes-autos.herokuapp.com/api/vehicles?color=${color}`)
+      .then((response)=>{
+        this.setState({
+          vehiclesToDisplay:response.data
+        })
+        toast.success(`Here are the ${color} vehicles`)
+      }).catch((err)=>{
+        console.error(err)
+        toast.error("failed to filter by color")
+      })
   }
 
   updatePrice( priceChange, id ) {
     // axios (PUT)
     // setState with response -> vehiclesToDisplay
+    axios.put(`http://joes-autos.herokuapp.com/api/vehicles/${id}/${priceChange}`)
+    .then((response)=>{
+      console.log(response.data)
+      this.setState({
+        vehiclesToDisplay:response.data.vehicles
+      })
+      toast.success('Updated Price')
+    }).catch((err)=>{
+      console.error(err)
+      toast.error("failed to update price")
+    })
   }
 
   addCar() {
@@ -73,6 +126,16 @@ class App extends Component {
 
     // axios (POST)
     // setState with response -> vehiclesToDisplay
+    axios.post('http://joes-autos.herokuapp.com/api/vehicles', newCar)
+      .then((response)=>{
+        this.setState({
+          vehiclesToDisplay:response.data.vehicles
+        })
+        toast.success("Yo add'd yo carrrgh")
+      }).catch((err)=>{
+        console.error(err)
+        toast.error("You di'nt add no carrrgh")
+      })
   }
 
   addBuyer() {
